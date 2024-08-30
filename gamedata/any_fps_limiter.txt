@@ -1,0 +1,22 @@
+"Games"
+{
+	"left4dead2"
+	{
+		"Addresses" 
+		{
+			"_Host_RunFrame"
+			{
+				"signature" "_Host_RunFrame"
+			}
+		}
+
+		"Signatures" 
+		{
+			"_Host_RunFrame"
+			{
+				"library" "engine"
+				"windows" "\x55\x8B\xEC\x83\xEC\x50\x8B\x0D\x2A\x2A\x2A\x2A\x8B\x01\x8B\x90\x2A\x2A\x2A\x2A"
+			}
+		}
+	}
+}
