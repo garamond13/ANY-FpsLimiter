@@ -4,9 +4,8 @@
 #pragma semicolon 1
 #pragma newdecls required
 
-#define VERSION "1.0.0"
+#define VERSION "1.0.1"
 
-Handle g_host_runframe_time;
 float g_host_runframe_time_val;
 float g_start;
 
@@ -31,13 +30,8 @@ public void OnPluginStart()
 	DHookEnableDetour(detour, true, host_runframe_post);
 
 	// Create convar for easier setup.
-	g_host_runframe_time = CreateConVar("host_runframe_time", "0", "Minimum time in seconds before we can exit void _Host_RunFrame(float time) function");
-	HookConVarChange(g_host_runframe_time, on_host_runframe_time);
-}
-
-public void OnConfigsExecuted()
-{
-	g_host_runframe_time_val = GetConVarFloat(g_host_runframe_time);
+	Handle host_runframe_time = CreateConVar("host_runframe_time", "0", "Minimum time in seconds before we can exit void _Host_RunFrame(float time) function");
+	HookConVarChange(host_runframe_time, on_host_runframe_time);
 }
 
 void on_host_runframe_time(ConVar convar, const char[] oldValue, const char[] newValue)

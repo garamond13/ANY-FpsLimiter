@@ -11,3 +11,8 @@ If the game server that you need is not yet supported, you can provide a signatr
 
 ## Compilation
 If you don't know how to compile it into SourceMod plugin (.smx) see https://wiki.alliedmods.net/Compiling_SourceMod_Plugins
+
+## Changelog
+
+Version 1.0.1
+- Simplify.
