@@ -15,7 +15,7 @@ public Plugin myinfo = {
 	author = "Garamond",
 	description = "FPS limiter.",
 	version = VERSION,
-	url = ""
+	url = "https://github.com/garamond13/ANY-FpsLimiter"
 };
 
 public void OnPluginStart()
