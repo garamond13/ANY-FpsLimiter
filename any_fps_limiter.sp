@@ -4,7 +4,7 @@
 #pragma semicolon 1
 #pragma newdecls required
 
-#define VERSION "1.0.1"
+#define VERSION "2.0.0"
 
 float g_host_runframe_time_val;
 float g_start;
@@ -19,18 +19,19 @@ public Plugin myinfo = {
 
 public void OnPluginStart()
 {
-	// Load gamedata and get the "void _Host_RunFrame(float time)" address.
+	// Load gamedata and get CEngine::Frame address.
 	Handle game_data = LoadGameConfigFile("any_fps_limiter");
-	Address host_runframe = GameConfGetAddress(game_data, "_Host_RunFrame");
+	Address engine_frame = GameConfGetAddress(game_data, "CEngine::Frame");
 	CloseHandle(game_data);
 	
 	// Create detour and enable pre and post callbacks.
-	Handle detour = DHookCreateDetour(host_runframe, CallConv_CDECL, ReturnType_Void, ThisPointer_Ignore);
-	DHookEnableDetour(detour, false, host_runframe_pre);
-	DHookEnableDetour(detour, true, host_runframe_post);
+	Handle detour = DHookCreateDetour(engine_frame, CallConv_THISCALL, ReturnType_Void, ThisPointer_Ignore);
+	DHookEnableDetour(detour, false, engine_frame_pre);
+	DHookEnableDetour(detour, true, engine_frame_post);
 
 	// Create convar for easier setup.
-	Handle host_runframe_time = CreateConVar("host_runframe_time", "0", "Minimum time in seconds before we can exit void _Host_RunFrame(float time) function");
+	// Keep the convar name for legacy reasons.
+	Handle host_runframe_time = CreateConVar("host_runframe_time", "0", "Minimum time in seconds before we can exit CEngine::Frame function");
 	HookConVarChange(host_runframe_time, on_host_runframe_time);
 }
 
@@ -39,13 +40,13 @@ void on_host_runframe_time(ConVar convar, const char[] oldValue, const char[] ne
 	g_host_runframe_time_val = GetConVarFloat(convar);
 }
 
-MRESReturn host_runframe_pre()
+MRESReturn engine_frame_pre()
 {
 	g_start = GetEngineTime();
 	return MRES_Ignored;
 }
 
-MRESReturn host_runframe_post()
+MRESReturn engine_frame_post()
 {
 	while (GetEngineTime() - g_start < g_host_runframe_time_val)
 		continue;

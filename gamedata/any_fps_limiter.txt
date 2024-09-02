@@ -4,18 +4,18 @@
 	{
 		"Addresses" 
 		{
-			"_Host_RunFrame"
+			"CEngine::Frame"
 			{
-				"signature" "_Host_RunFrame"
+				"signature" "CEngine::Frame"
 			}
 		}
 
 		"Signatures" 
 		{
-			"_Host_RunFrame"
+			"CEngine::Frame"
 			{
 				"library" "engine"
-				"windows" "\x55\x8B\xEC\x83\xEC\x50\x8B\x0D\x2A\x2A\x2A\x2A\x8B\x01\x8B\x90\x2A\x2A\x2A\x2A"
+				"windows" "\x55\x8B\xEC\x83\xEC\x38\x53\x8B\xD9"
 			}
 		}
 	}
