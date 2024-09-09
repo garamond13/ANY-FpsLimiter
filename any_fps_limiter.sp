@@ -1,13 +1,13 @@
 #include <sourcemod>
 #include <dhooks>
+#include <precise_time>
 
 #pragma semicolon 1
 #pragma newdecls required
 
-#define VERSION "2.0.0"
+#define VERSION "3.0.0"
 
-float g_host_runframe_time_val;
-float g_start;
+float g_engine_frame_time_val;
 
 public Plugin myinfo = {
 	name = "ANY FpsLimiter",
@@ -31,24 +31,23 @@ public void OnPluginStart()
 
 	// Create convar for easier setup.
 	// Keep the convar name for legacy reasons.
-	Handle host_runframe_time = CreateConVar("host_runframe_time", "0", "Minimum time in seconds before we can exit CEngine::Frame function");
-	HookConVarChange(host_runframe_time, on_host_runframe_time);
+	Handle engine_frame_time = CreateConVar("engine_frame_time", "0", "Minimum time in miliseconds before we can exit CEngine::Frame function");
+	HookConVarChange(engine_frame_time, on_engine_frame_time);
 }
 
-void on_host_runframe_time(ConVar convar, const char[] oldValue, const char[] newValue)
+void on_engine_frame_time(ConVar convar, const char[] oldValue, const char[] newValue)
 {
-	g_host_runframe_time_val = GetConVarFloat(convar);
+	g_engine_frame_time_val = GetConVarFloat(convar);
 }
 
 MRESReturn engine_frame_pre()
 {
-	g_start = GetEngineTime();
+	StartGlobalPreciseTimer();
 	return MRES_Ignored;
 }
 
 MRESReturn engine_frame_post()
 {
-	while (GetEngineTime() - g_start < g_host_runframe_time_val)
-		continue;
+	PreciseThreadSleep(g_engine_frame_time_val - GetGlobalPreciseTimeInterval());
 	return MRES_Ignored;
 }
