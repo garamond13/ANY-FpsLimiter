@@ -30,7 +30,6 @@ public void OnPluginStart()
 	DHookEnableDetour(detour, true, engine_frame_post);
 
 	// Create convar for easier setup.
-	// Keep the convar name for legacy reasons.
 	Handle engine_frame_time = CreateConVar("engine_frame_time", "0", "Minimum time in miliseconds before we can exit CEngine::Frame function");
 	HookConVarChange(engine_frame_time, on_engine_frame_time);
 }
